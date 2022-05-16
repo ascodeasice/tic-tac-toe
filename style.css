@@ -1,0 +1,30 @@
+:root{
+
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.board{
+    width:400px;
+    height:400px;
+    display:grid;
+    grid-template-rows:repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
+    grid-gap:5px;
+    background-color:black ;
+}
+
+.block{
+    background-color:pink;
+}
+
+.imgX{
+}
+
+.imgO{
+
+}

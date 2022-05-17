@@ -1,5 +1,5 @@
 :root{
-
+--blockSize:400px;
 }
 
 body{
@@ -9,8 +9,8 @@ body{
 }
 
 .board{
-    width:400px;
-    height:400px;
+    width:var(--blockSize);
+    height:var(--blockSize);
     display:grid;
     grid-template-rows:repeat(3,1fr);
     grid-template-columns:repeat(3,1fr);
@@ -20,11 +20,22 @@ body{
 
 .block{
     background-color:pink;
+    display:grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.emptyBlock{
+    height:0;
+    width:0;
 }
 
 .imgX{
+    height:70%;
+    width:70%;
 }
 
 .imgO{
-
+    height:70%;
+    width:70%;
 }

@@ -9,5 +9,5 @@ A project to mimic the Tic Tac Toe game.
 
 ![A picture of result]()
 
-# link
-[Link of the project]()
+# Link
+[Live preview](https://ascodeasice.github.io/tic-tac-toe/)

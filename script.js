@@ -1,5 +1,6 @@
+
+//FIXME clicking on the same block with replace it
 const boardSize=3
-//TODO add eventListener for div, and add text next next day
 
 const board= (()=>{
     let board=[];
@@ -21,7 +22,7 @@ const board= (()=>{
             return;
         }
         board[i][j]=symbol;
-        board.display();
+        display();
     }
 
     const display=()=>{
@@ -30,18 +31,22 @@ const board= (()=>{
         //check every value of board, then change class,src of image in div
         for(let i=0;i<boardSize;i++){
             for(let j=0;j<boardSize;j++){
-                if(board[i][j]!=' '){
-                    const block=document.getElementById("block"+String(i)+"_"+String(j));
-                    block.classList.remove('emptyBlock');
+                const block=document.getElementById("block"+String(3*i+j));//NOTE the id is 0~8
+                block.classList.remove('emptyBlock');
 
-                    if(board[i][j]=='X'){
-                        block.src="images/x-svgrepo-com.svg";
-                        block.classList.add("imgX");
-                    }
-                    else if(board[i][j]=='O'){
-                        block.src="images/circle-svgrepo-com.svg";
-                        block.classList.add("imgX");
-                    }
+                if(board[i][j]=='X'){
+                    block.src="images/x-svgrepo-com.svg";
+                    block.classList.add("imgX");
+                }
+                else if(board[i][j]=='O'){
+                    block.src="images/circle-svgrepo-com.svg";
+                    block.classList.add("imgO");
+                }
+                else{
+                    block.src="#";
+                    block.classList.remove("imgO");
+                    block.classList.remove("imgX");
+                    block.classList.add("emptyBlock");
                 }
             }
         }  
@@ -91,7 +96,11 @@ const board= (()=>{
     }
 
     const reset=()=>{
-        board.forEach(row=>row.forEach(block=>block=" "))
+        for(let i=0;i<boardSize;i++){
+            for(let j=0;j<boardSize;j++)
+            board[i][j]=' ';
+        }
+        display();
     }
 
     return {board,setSymbol,display,reset,win};
@@ -109,18 +118,33 @@ const playerFactory = (name,symbol,board)=>{
         //TODO show text on the page
         if(board.win(symbol)){
             console.log(name,"win!");
-            //ask for reset
+            //TODO ask for reset
             }
     }
 
     return {name,symbol,place};
 }
 
-const user=playerFactory('you','X',board);
+let turn=1;//TODO reset turn in reset()
 
-// user.place(0,2)
-// user.place(1,1)
-// user.place(2,1)
-// user.place(0,1)
+const containers=document.getElementsByClassName("container");
+for(let i=0;i<containers.length;i++){
+    containers[i].addEventListener("click",function(){
+        block=document.getElementById("block"+String(i));
+        if(turn%2==1)
+            player1.place(Math.floor(i/3),i%3);
+        else if(turn%2==0)
+            player2.place(Math.floor(i/3),i%3);
+        turn++;
+    })
+}
+
+const player1=playerFactory('player1','X',board);
+const player2=playerFactory('player2','O',board);
+const restartBtn=document.getElementById("restartBtn");
+restartBtn.addEventListener("click",function(){
+    board.reset();
+})
+
 
 board.display();

@@ -8,7 +8,7 @@ When the game ends, you can press the restart button to start another game.
 
 # Result
 
-![A picture of result]()
+![A picture of result](https://github.com/ascodeasice/tic-tac-toe/blob/main/images/result.png)
 
 # Link
 [Live preview](https://ascodeasice.github.io/tic-tac-toe/)

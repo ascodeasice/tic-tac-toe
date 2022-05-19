@@ -1,6 +1,6 @@
-
-//FIXME clicking on the same block with replace it
 const boardSize=3
+let turn=1;
+const infoText=document.getElementById("infoText");
 
 const board= (()=>{
     let board=[];
@@ -12,7 +12,7 @@ const board= (()=>{
         board.push(row);
     }
 
-    const setSymbol=(i,j,symbol)=>{
+    const setSymbol=(i,j,symbol)=>{//NOTE controls turn in this function
         if(i<0||j<0||i>boardSize||j>boardSize)
             console.log("invalid index to setSymbol:",i,",",j)
 
@@ -21,13 +21,22 @@ const board= (()=>{
             console.log("wrong symbol\n you input:",symbol);
             return;
         }
+        if(board[i][j]!=' '){
+            console.log("already placed");
+            return;
+        }
         board[i][j]=symbol;
+        turn++;
+        if(turn%2==0){
+            infoText.innerText=player2.name+" 's turn"
+        }
+        else{
+            infoText.innerText=player1.name+' s turn';
+        }
         display();
     }
 
     const display=()=>{
-        console.table(board);
-
         //check every value of board, then change class,src of image in div
         for(let i=0;i<boardSize;i++){
             for(let j=0;j<boardSize;j++){
@@ -90,6 +99,17 @@ const board= (()=>{
                     if(cnt==boardSize)
                         return true;
                 }
+                if((i==0)&&(j==boardSize-1)){
+                    cnt=0;
+                    while(cnt<boardSize){
+                        if(board[i+cnt][j-cnt]!=symbol){
+                            break;
+                        }
+                        cnt++;
+                    }
+                    if(cnt==boardSize)
+                        return true;
+                }
             }
         }
         return false;
@@ -100,6 +120,8 @@ const board= (()=>{
             for(let j=0;j<boardSize;j++)
             board[i][j]=' ';
         }
+        turn=1;
+        infoText.innerText=player1.name+" 's turn"
         display();
     }
 
@@ -110,22 +132,21 @@ const board= (()=>{
 
 const playerFactory = (name,symbol,board)=>{
     const place = (i,j)=>{
-        if(board.win(symbol))
-            return;//end after 
-
+        if(board.win('O')||board.win('X'))
+            return;
         board.setSymbol(i,j,symbol);
-        console.log(name,"placed",symbol,"on","(" ,i+1,",",j+1,")")
-        //TODO show text on the page
+
         if(board.win(symbol)){
-            console.log(name,"win!");
-            //TODO ask for reset
-            }
+            infoText.innerText=name+" wins!"
+        }
+        else if(turn==10&&!(board.win(symbol))){
+            infoText.innerText="It's a tie!";
+        }
     }
 
     return {name,symbol,place};
 }
 
-let turn=1;//TODO reset turn in reset()
 
 const containers=document.getElementsByClassName("container");
 for(let i=0;i<containers.length;i++){
@@ -135,12 +156,11 @@ for(let i=0;i<containers.length;i++){
             player1.place(Math.floor(i/3),i%3);
         else if(turn%2==0)
             player2.place(Math.floor(i/3),i%3);
-        turn++;
     })
 }
 
-const player1=playerFactory('player1','X',board);
-const player2=playerFactory('player2','O',board);
+const player1=playerFactory('player X','X',board);
+const player2=playerFactory('player O','O',board);
 const restartBtn=document.getElementById("restartBtn");
 restartBtn.addEventListener("click",function(){
     board.reset();
